@@ -19,7 +19,16 @@ class WeeklyScreen extends ConsumerWidget {
 
    @override
   build(context, ref) {
-    return const Text("Weekly");
+    final mainLogic = ref.watch(mainLogicProvider);
+    final userID = mainLogic.getUserID();
+
+    return FirestoreListView(
+      query: mainLogic.db.collection('users').doc(userID).collection('tasks').orderBy('index'), 
+      itemBuilder: (context, snapshot) {
+        Object? task = snapshot.data();
+        return Text(task.toString());
+      }
+      );
   }
 }
 

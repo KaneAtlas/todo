@@ -17,7 +17,13 @@ class AuthGate extends ConsumerWidget {
           ]);
         } else {
           mainLogic.setUser(snapshot.data);
-          return callbackWidget;
+          return FutureBuilder(
+            future: mainLogic.futureInit(),
+            builder: (context, _) {
+              return callbackWidget;
+            }
+            
+            );
         }
       },
     );

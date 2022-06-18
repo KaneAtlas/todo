@@ -78,7 +78,7 @@ class MySignOutButton extends ConsumerWidget {
   @override
   build(BuildContext context, WidgetRef ref) {
     final mainLogic = ref.read(mainLogicProvider);
-    return TextButton(
+    return ElevatedButton(
         child: const Text("sign out"),
         onPressed: () {
           FlutterFireUIAuth.signOut(context: context);
