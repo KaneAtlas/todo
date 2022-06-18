@@ -87,7 +87,7 @@ class MainLogic extends ChangeNotifier {
 
   Future<void> futureInit() async {
     userID = user!.uid;
-    final QuerySnapshot<Map<String, dynamic>> obj = await db.collection('users').get();
+    final QuerySnapshot<Map<String, dynamic>> obj = await db.collection('users').doc(userID).collection('tasks').get();
     print('this ' + obj.docs[0].id);
     print(obj.docs[0].id == userID);
     print('this ' + userID!);
