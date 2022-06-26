@@ -71,7 +71,7 @@ class RootState extends State<Root> {
         ),
       
       floatingActionButton:
-          FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
+          FloatingActionButton(onPressed: () {openAddTaskScreen(context);}, child: const Icon(Icons.add)),
       bottomNavigationBar: NavigationBar(
         destinations: const <NavigationDestination>[
           NavigationDestination(

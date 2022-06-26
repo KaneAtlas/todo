@@ -24,14 +24,8 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-              icon: const Icon(Icons.keyboard_arrow_left),
-              onPressed: () {
-                Navigator.of(context).pop();
-              })),
-      body: Center(
+    return ScreenFrame(
+      child: Center(
         child: Column(
           children: [
             ProfileSettings(),
