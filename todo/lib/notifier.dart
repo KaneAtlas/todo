@@ -99,6 +99,30 @@ class MainLogic extends ChangeNotifier {
     return a;
   }
 
+  //####################################
+  //add task stuff
+
+  List<String> tempTaskLists = [];
+
+  void taskAddList(String list) {
+    if (tempTaskLists.contains(list)) {
+      return;
+    }
+    tempTaskLists.add(list);
+    notifyListeners();
+  }
+
+  void taskRemoveList(String list) {
+    if (tempTaskLists.contains(list)) {
+      tempTaskLists.remove(list);
+    }
+    notifyListeners();
+  }
+
+  void createTask() {
+    //TODO this function
+  }
+
 
   //####################################
   //auth funcs

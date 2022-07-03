@@ -32,6 +32,7 @@ part 'add_task.dart';
 
 //re usable components
 part "components.dart";
+part "functions.dart";
 
 
 fq.QuillController _quillController = fq.QuillController.basic();
