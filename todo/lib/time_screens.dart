@@ -3,14 +3,7 @@ part of todo_lib;
 class DailyScreen extends ConsumerWidget {
   @override
   build(context, ref) {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return OutlinedCard(
-            child:
-                SizedBox(width: 200, child: Text("Daily" + index.toString())));
-      },
-      itemCount: 20,
-    );
+    return Container();
   }
 }
 
@@ -25,10 +18,14 @@ class WeeklyScreen extends ConsumerWidget {
             .collection('users')
             .doc(userID)
             .collection('tasks')
-            .orderBy('index'),
+            .where('taskDepth', isEqualTo: 0)
+            .orderBy('targetFinishTime'),
         itemBuilder: (context, snapshot) {
-          Object? task = snapshot.data();
-          return Text(task.toString());
+          String taskId = TaskBuilder().from(snapshot.data()).taskId;
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: TaskCard(taskId),
+          );
         });
   }
 }

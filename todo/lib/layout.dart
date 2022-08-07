@@ -54,7 +54,7 @@ class RootState extends State<Root> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: const Icon(Icons.clear_all_rounded),
-        actions: [Avatar(), Container(width: 10)],
+        actions: [const TopRightWidget(), Container(width: 10)],
       ),
       extendBodyBehindAppBar: true,
       body: PageView(
@@ -71,7 +71,7 @@ class RootState extends State<Root> {
         ),
       
       floatingActionButton:
-          FloatingActionButton(onPressed: () {openAddTaskScreen(context);}, child: const Icon(Icons.add)),
+          const ConsumerFAB(),
       bottomNavigationBar: NavigationBar(
         destinations: const <NavigationDestination>[
           NavigationDestination(
@@ -90,6 +90,18 @@ class RootState extends State<Root> {
   }
 }
 
+class ConsumerFAB extends ConsumerWidget {
+  const ConsumerFAB({super.key});
+
+  @override
+  build(BuildContext context, WidgetRef ref) {
+    final mainLogic = ref.watch(mainLogicProvider);
+    final createTask = mainLogic.createTask;
+    final isDelete = mainLogic.getSetting("delete");
+    return isDelete ? Container() : FloatingActionButton(onPressed: () {openAddTaskScreen(context, createTask, null, -1);}, child: const Icon(Icons.add));
+  }
+}
+
 header(context) {
   return PreferredSize(
     preferredSize: const Size.fromHeight(40),
@@ -100,8 +112,20 @@ header(context) {
             IconButton(
                 icon: const Icon(Icons.clear_all_rounded), onPressed: () {}),
             const Spacer(),
-            Avatar(),
+            const TopRightWidget(),
           ],
         )),
   );
+}
+
+class TopRightWidget extends ConsumerWidget {
+  const TopRightWidget({super.key});
+
+  @override
+  build(BuildContext context, WidgetRef ref) {
+    final mainLogic = ref.watch(mainLogicProvider);
+    final isDelete = mainLogic.getSetting("delete");
+    final returnWidget = isDelete ? const StopDelete() : Avatar();
+    return returnWidget;
+  }
 }

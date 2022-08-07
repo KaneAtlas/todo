@@ -1,26 +1,35 @@
 part of todo_lib;
 
-void openAddTaskScreen(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => AddTaskScreen()));
+void openAddTaskScreen(BuildContext context, Function createTask, String? parentTaskId, int taskDepth) async {
+  final result = await Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => AddTaskScreen(parentTaskId, taskDepth)));
+  if (result == "task created") {
+    print("creating task");
+    createTask();
+  }
 }
 
 class AddTaskScreen extends ConsumerWidget {
-  AddTaskScreen({super.key});
+  final String? parentTaskId;
+  final int taskDepth;
+
+  const AddTaskScreen(this.parentTaskId, this.taskDepth, {super.key});
 
   @override
   build(BuildContext context, WidgetRef ref) {
     return ScreenFrame(
-      child: AddTaskContent(''),
+      child: AddTaskContent(parentTaskId, taskDepth),
     );
   }
 }
 
 class AddTaskContent extends ConsumerWidget {
-  final String parentTaskId;
+  final String? parentTaskId;
+  final int taskDepth;
 
   AddTaskContent(
     this.parentTaskId,
+    this.taskDepth,
     {super.key}
   );
 
@@ -48,7 +57,7 @@ class AddTaskContent extends ConsumerWidget {
       
     } else {
       form.save();
-      print("saving");
+      
     }
   }
 
@@ -71,11 +80,19 @@ class AddTaskContent extends ConsumerWidget {
   }
 
   String? _validateTitle(String? value) {
+    return _validateCommon(value);
+  }
+
+  String? _validateSubtitle(String? value) {
+    return null;
+  }
+
+  String? _validateTask(String? value) {
     return null;
   }
 
   String? _validateCommon(String? value) {
-    if (value == null) {
+    if (value == null || value == '') {
       return 'this as well';
     }
     if (value.length > 35) {
@@ -90,6 +107,10 @@ class AddTaskContent extends ConsumerWidget {
     final addList = mainLogic.taskAddList;
     final removeList = mainLogic.taskRemoveList;
     final taskLists = mainLogic.tempTaskLists;
+
+    // init builder with parent and depth
+    mainLogic.buildTask("taskDepth", taskDepth + 1);
+    mainLogic.buildTask("parentId", parentTaskId);
 
     return Form(
         key: _formKey,
@@ -113,6 +134,9 @@ class AddTaskContent extends ConsumerWidget {
                     ),
                     onSaved: (value) {
                       print(value);
+                      mainLogic.buildTask("title", value);
+                      Navigator.of(context).pop("task created");
+                      showInSnackBar("Task added", context);
                     },
                     validator: _validateTitle,
                   ),
@@ -131,8 +155,9 @@ class AddTaskContent extends ConsumerWidget {
                     ),
                     onSaved: (value) {
                       print(value);
+                      mainLogic.buildTask("subtitle", value);
                     },
-                    validator: _validateTitle,
+                    validator: _validateSubtitle,
                   ),
                 ),
                 // fq.QuillToolbar.basic(controller: _quillController),
@@ -185,8 +210,9 @@ class AddTaskContent extends ConsumerWidget {
                   ),
                   onSaved: (value) {
                     print(value);
+                    mainLogic.buildTask("content", value);
                   },
-                  validator: _validateTitle,
+                  validator: _validateTask,
                   maxLines: 6,
                 ),
                 const Space(20),

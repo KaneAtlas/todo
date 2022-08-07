@@ -8,12 +8,12 @@ class OutlinedCard extends StatelessWidget {
   @override
   build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(2.0),
       child: Center(
         child: Card(
             elevation: 0,
             child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(5),
               child: child,
             ),
             shape: RoundedRectangleBorder(
@@ -56,6 +56,7 @@ PreferredSizeWidget backBar(BuildContext context) {
   return AppBar(
     leading: const BackButton(),
     backgroundColor: Colors.transparent,
+    actions: const [StopDelete()]
   );
 }
 
@@ -88,5 +89,20 @@ class ScreenFrame extends StatelessWidget {
   @override
   build(BuildContext context) {
     return Scaffold(appBar: backBar(context), body: child);
+  }
+}
+
+class StopDelete extends ConsumerWidget {
+  const StopDelete({super.key});
+  @override
+  build(BuildContext context, WidgetRef ref) {
+    final mainLogic = ref.watch(mainLogicProvider);
+    final bool isDelete = mainLogic.getSetting("delete");
+    return isDelete ? IconButton(
+      icon: const Icon(Icons.close),
+      onPressed: () {
+        mainLogic.setMode("delete", false);
+      }
+    ) : Container();
   }
 }

@@ -11,6 +11,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:flutter_quill/flutter_quill.dart' as fq;
+import 'package:uuid/uuid.dart';
+import 'dart:collection';
+
 
 
 //backend logic
@@ -33,6 +36,7 @@ part 'add_task.dart';
 //re usable components
 part "components.dart";
 part "functions.dart";
+part "task_components.dart";
 
 
 fq.QuillController _quillController = fq.QuillController.basic();
