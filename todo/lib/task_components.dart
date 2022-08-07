@@ -12,7 +12,7 @@ class TaskCard extends ConsumerWidget {
   Widget? delete(bool isDelete, Function deleteTask) {
     if (isDelete) {
       return IconButton(
-        icon: const Icon(Icons.delete_forever_outlined),
+        icon: const Icon(Icons.delete_outlined),
         onPressed: () {
           deleteTask(taskId);
         },

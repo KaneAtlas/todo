@@ -38,6 +38,17 @@ class Space extends StatelessWidget {
   }
 }
 
+
+class HSpace extends StatelessWidget {
+  final double space;
+
+  const HSpace(this.space, {super.key});
+
+  @override
+  build(BuildContext context) {
+    return SizedBox(width: space);
+  }
+}
 class BackButton extends StatelessWidget {
   const BackButton({super.key});
 

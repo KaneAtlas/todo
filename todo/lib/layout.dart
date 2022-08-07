@@ -134,17 +134,3 @@ class TopRightWidget extends ConsumerWidget {
     return returnWidget;
   }
 }
-
-class TaskListDrawerButton extends ConsumerWidget {
-  const TaskListDrawerButton({super.key});
-
-  @override
-  build(BuildContext context, WidgetRef ref) {
-    return IconButton(
-      icon: const Icon(Icons.clear_all_rounded),
-      onPressed: () {
-        openTaskListDrawer(context);
-      },
-      );
-  }
-}
