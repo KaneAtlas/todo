@@ -169,6 +169,11 @@ class TaskTree {
     updateLists(task);
   }
 
+  removeTask(String taskId) {
+    tasks.remove(taskId);
+
+  }
+
   TaskData? getTask(String taskId) {
     if (tasks.containsKey(taskId)) {
       return tasks[taskId]!;
@@ -375,6 +380,8 @@ class MainLogic extends ChangeNotifier {
     debugPrint("deleting task");
     final doc = db.collection("users").doc(userID).collection('tasks').doc(taskId);
     doc.delete();
+    taskTree.removeTask(taskId);
+    notifyListeners();
     // delete children also
   }
 

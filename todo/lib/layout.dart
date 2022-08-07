@@ -53,25 +53,24 @@ class RootState extends State<Root> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const Icon(Icons.clear_all_rounded),
+        leading: null, //const TaskListDrawerButton(),
         actions: [const TopRightWidget(), Container(width: 10)],
       ),
       extendBodyBehindAppBar: true,
+      drawer: const TaskListDrawer(),
       body: PageView(
-          controller: _controller,
-          onPageChanged: (index) {
-            pageChanged(index);
-          },
-          children: [
-            DailyScreen(),
-            WeeklyScreen(),
-            MonthlyScreen(),
-            CalendarScreen(),
-          ],
-        ),
-      
-      floatingActionButton:
-          const ConsumerFAB(),
+        controller: _controller,
+        onPageChanged: (index) {
+          pageChanged(index);
+        },
+        children: [
+          DailyScreen(),
+          WeeklyScreen(),
+          MonthlyScreen(),
+          CalendarScreen(),
+        ],
+      ),
+      floatingActionButton: const ConsumerFAB(),
       bottomNavigationBar: NavigationBar(
         destinations: const <NavigationDestination>[
           NavigationDestination(
@@ -98,7 +97,13 @@ class ConsumerFAB extends ConsumerWidget {
     final mainLogic = ref.watch(mainLogicProvider);
     final createTask = mainLogic.createTask;
     final isDelete = mainLogic.getSetting("delete");
-    return isDelete ? Container() : FloatingActionButton(onPressed: () {openAddTaskScreen(context, createTask, null, -1);}, child: const Icon(Icons.add));
+    return isDelete
+        ? Container()
+        : FloatingActionButton(
+            onPressed: () {
+              openAddTaskScreen(context, createTask, null, -1);
+            },
+            child: const Icon(Icons.add));
   }
 }
 
@@ -127,5 +132,19 @@ class TopRightWidget extends ConsumerWidget {
     final isDelete = mainLogic.getSetting("delete");
     final returnWidget = isDelete ? const StopDelete() : Avatar();
     return returnWidget;
+  }
+}
+
+class TaskListDrawerButton extends ConsumerWidget {
+  const TaskListDrawerButton({super.key});
+
+  @override
+  build(BuildContext context, WidgetRef ref) {
+    return IconButton(
+      icon: const Icon(Icons.clear_all_rounded),
+      onPressed: () {
+        openTaskListDrawer(context);
+      },
+      );
   }
 }
