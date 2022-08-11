@@ -380,9 +380,12 @@ class MainLogic extends ChangeNotifier {
     debugPrint("deleting task");
     final doc = db.collection("users").doc(userID).collection('tasks').doc(taskId);
     doc.delete();
+    TaskData task = taskTree.getTask(taskId)!;
+    for (String subTaskId in task.subTasks) {
+      deleteTask(subTaskId);
+    }
     taskTree.removeTask(taskId);
     notifyListeners();
-    // delete children also
   }
 
   void initSub() {

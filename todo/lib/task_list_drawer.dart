@@ -43,7 +43,7 @@ class TaskListDrawerContent extends ConsumerWidget {
                 );
               }),
         ),
-        const Center(child: AddTaskList())
+        Center(child: AddTaskList())
       ],
     );
   }
@@ -59,7 +59,9 @@ class TaskListTile extends ConsumerWidget {
     final isEdit = mainLogic.getSetting("editTaskLists");
     return ListTile(
       title: Text(title),
-      leading: isEdit ? const Icon(Icons.drag_handle_outlined, size: 20, color: Colors.grey) : null,
+      leading: isEdit
+          ? const Icon(Icons.drag_handle_outlined, size: 20, color: Colors.grey)
+          : null,
       trailing: isEdit ? const Icon(Icons.delete_outline, size: 20) : null,
     );
   }
@@ -86,12 +88,66 @@ class EditTaskLists extends ConsumerWidget {
 }
 
 class AddTaskList extends ConsumerWidget {
-  const AddTaskList({super.key});
+  AddTaskList({super.key});
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
+
+  void _handleSubmitted() {
+    final form = _formKey2.currentState!;
+    if (!form.validate()) {
+      
+    } else {
+      form.save();
+      
+    }
+  }
+
+  String? _validateTaskList(String? value) {
+    return null;
+  }
 
   @override
   build(BuildContext context, WidgetRef ref) {
     final mainLogic = ref.watch(mainLogicProvider);
     final isEdit = mainLogic.getSetting("editTaskLists");
-    return isEdit ? OutlinedButton(onPressed: () {}, child: const Text('add_task_list')) : Container();
+    return isEdit
+        ? OutlinedButton(
+            onPressed: () {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: displayTitle("add_task_list"),
+                  content: Form(
+                      key: _formKey2,
+                      child: SizedBox(
+                          height: 60,
+                          child: TextFormField(
+                            textInputAction: TextInputAction.next,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              icon: Icon(Icons.add_box_outlined),
+                              hintText: "trip_to_spain",
+                              labelText: "task_list",
+                            ),
+                          onSaved: (value) {
+                            Navigator.of(context).pop();
+                            showInSnackBar("task_list added: " + value!, context);
+                          },
+                          validator: _validateTaskList,
+                          ))),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: _handleSubmitted,
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            child: const Text('add_task_list'))
+        : Container();
   }
 }
